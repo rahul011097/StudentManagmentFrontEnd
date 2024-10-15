@@ -14,10 +14,10 @@ function App() {
   };
 
   const [students, setStudents] = useState(getStudentsFromLocalStorage());
-  const [filteredStudents, setFilteredStudents] = useState(students);
+  const [filteredStudents, setFilteredStudents] = useState([]);
   const [editStudent, setEditStudent] = useState(null);
-  const [sortField, setSortField] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [sortType, setSortType] = useState('');
+  const [sort, setSort] = useState('ASC');
 
   
 
@@ -38,8 +38,6 @@ function App() {
        const nextId = students.length > 0
         ? Math.max(...students.map(s => s.id)) + 1
         : 101;
-  
-      // Add new student with the next ID
       setStudents([...students, { ...student, id: nextId }]);
     }
   };
@@ -53,31 +51,35 @@ function App() {
     setFilteredStudents(filteredList);
   };
 
-  const sortStudents = (field) => {
-    const sortedStudents = [...filteredStudents].sort((a, b) => {
-      if (a[field] < b[field]) {
-        return sortOrder === 'asc' ? -1 : 1;
-      }
-      if (a[field] > b[field]) {
-        return sortOrder === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
+  const sortStudents = (type) => {
+  const sortedStudents = [...filteredStudents].sort((a, b) => {
+    const aValue = typeof a[type] === 'string' ? a[type].toLowerCase() : a[type];
+    const bValue = typeof b[type] === 'string' ? b[type].toLowerCase() : b[type];
 
-    setSortField(field);
-    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    setFilteredStudents(sortedStudents);
-  };
+    if (aValue < bValue) {
+      return sort === 'ASC' ? -1 : 1;
+    }
+    if (aValue > bValue) {
+      return sort === 'ASC' ? 1 : -1;
+    }
+    return 0;
+  });
+
+  setSortType(type);
+  setSort(sort === 'ASC' ? 'DESC' : 'ASC');
+  setFilteredStudents(sortedStudents);
+};
+
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-    <h1 className="text-3xl font-bold text-center text-gray-600 mb-4">Student Record Management</h1>
-    <div className="max-w-3xl mx-auto bg-white shadow-md rounded p-6">
+    <div className="min-h-screen bg-gray-100 p-2 md:p-4">
+    <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-600 mb-4">Student Record Management</h1>
+    <div className="max-w-full md:max-w-3xl mx-auto bg-white shadow-md rounded p-4 md:p-6">
       <Form addOrEditStudent={addOrEditStudent} editStudent={editStudent} />
     <Search students={students} onFilter={handleFilter} />
       <StudentRecord students={filteredStudents} deleteStudent={deleteStudent} setEditStudent={setEditStudent} sortStudents={sortStudents}
-          sortField={sortField}
-          sortOrder={sortOrder} />
+          sortType={sortType}
+          sort={sort} />
     </div>
   </div>
   );

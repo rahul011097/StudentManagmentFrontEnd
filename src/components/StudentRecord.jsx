@@ -1,12 +1,12 @@
 import React from 'react';
 
-const StudentRecord = ({ students, deleteStudent, setEditStudent,sortStudents, sortField, sortOrder, }) => {
+const StudentRecord = ({ students, deleteStudent, setEditStudent,sortStudents, sortType, sort}) => {
     const capitalizeFirstLetter = (name) => {
         return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
       };
   return (
    <div>
-    <h2 className='text-xl flex justify-center text-center font-bold pb-4 text-gray-600'>Students Records</h2>
+    <h2 className='text-lg md:text-xl text-center font-bold pb-4 text-gray-600'>Students Records</h2>
     <table className="table-auto w-full text-left border-collapse">
       <thead>
         <tr className="bg-gray-200">
@@ -14,17 +14,17 @@ const StudentRecord = ({ students, deleteStudent, setEditStudent,sortStudents, s
 
           
           <th className="p-3 border-b cursor-pointer" onClick={() => sortStudents('name')}>
-            Name {sortField === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
+            Name(↑↓) {sortType === 'name' && (sort === 'ASC' ? '↑' : '↓')}
           </th>
 
           
           <th className="p-3 border-b cursor-pointer" onClick={() => sortStudents('age')}>
-            Age {sortField === 'age' && (sortOrder === 'asc' ? '↑' : '↓')}
+            Age(↑↓) {sortType === 'age' && (sort === 'ASC' ? '↑' : '↓')}
           </th>
 
           
           <th className="p-3 border-b cursor-pointer" onClick={() => sortStudents('grade')}>
-            Grade {sortField === 'grade' && (sortOrder === 'asc' ? '↑' : '↓')}
+            Grade(↑↓) {sortType === 'grade' && (sort === 'ASC' ? '↑' : '↓')}
           </th>
 
           <th className="p-3 border-b">Enrollment Status</th>
@@ -60,7 +60,7 @@ const StudentRecord = ({ students, deleteStudent, setEditStudent,sortStudents, s
       ))
     ) : (
       <tr>
-        <td colSpan="6" className="text-center py-4">No students found</td>
+        <td colSpan="6" className="p-3 text-center">No students found</td>
       </tr>
     )}
   </tbody>
